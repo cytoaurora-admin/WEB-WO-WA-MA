@@ -1,0 +1,19 @@
+{% extends 'WO/main.html' %} {% load static %} {% block content %}
+
+<div class="container py-5 px-5">
+    <form method="POST" class="container px-5">
+        <div class="input-group">
+            <label for="qrcode" class="col-form-label">输入要回收的 QR 码：</label>
+            <input id="qrcode" type="text" name="qrcode" class="form-control" required />
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-outline-dark" class="form-control">确认</button>
+            </div>
+        </div>
+        <br />
+        {% csrf_token %} {% for message in messages %}
+        <p id="messages"><span class="red-label">※{{message}}</span></p>
+        {% endfor %}
+    </form>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,83 @@
+{% extends 'WO/main.html' %} {% load static %} {% block content %}
+
+<script src="{% static 'js/exportCSV.js' %}"></script>
+<script src="{% static 'js/dateName.js' %}"></script>
+
+<div class="container py-5 px-5">
+    <form method="GET" class="container px-5">
+        {% csrf_token %} {% for message in messages %}
+        <p id="messages"><span class="red-label">※{{message}}</span></p>
+        {% endfor %}
+        <div class="row">
+            <div class="col-md-5">
+                <label for="date1" class="col-form-label">起始日期：</label>
+                <input type="date" id="date1" name="date1" class="form-control" value="{{ date1 }}" required /><br />
+            </div>
+            <div class="col-md-5">
+                <label for="date2" class="col-form-label">结束日期：</label>
+                <input type="date" id="date2" name="date2" class="form-control" value="{{ date2 }}" required /><br />
+            </div>
+            <div class="col-md-2">
+                <label for="" class="col-form-label" style="min-height: 31px"></label>
+                <div class="input-group">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-outline-dark">查询</button>
+                        <button type="button" class="btn btn-outline-primary" onclick="exportReport()">汇出</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <div class="mx-auto">
+                {% if sample_barcodes %}
+                <table class="table table-bordered" id="result">
+                    <thead>
+                        <tr>
+                            <th>年份</th>
+                            <th>工单编号</th>
+                            <th>QRcode</th>
+                            <th>实验机台编号</th>
+                            <th>检验说明</th>
+                            <th>工单说明</th>
+                            <th>检体取得单位</th>
+                            <th>检体编码(管)</th>
+                            <th>检体病理说明</th>
+                            <th>姓名</th>
+                            <th>病人生日</th>
+                            <th>年龄</th>
+                            <th>性别</th>
+                            <th>医华病历编码</th>
+                            <th>医院病历号码</th>
+                            <th>病人备注</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sample_barcode in sample_barcodes %} {% for qrcode in sample_barcode.qrcodes %}
+                        <tr>
+                            <td>{{ sample_barcode.extract|date:"Y" }}</td>
+                            <td>{{ qrcode.work_order.work_order }}</td>
+                            <td>{{ qrcode.qrcode }}</td>
+                            <td>{{ qrcode.machine }}</td>
+                            <td>{{ qrcode.comment }}</td>
+                            <td>{{ qrcode.work_order.comment }}</td>
+                            <td>{{ sample_barcode.source }}</td>
+                            <td>{{ sample_barcode.sample_barcode_detail }}</td>
+                            <td>{{ sample_barcode.histological_comment }}</td>
+                            <td>{{ sample_barcode.cat.patient_name }}</td>
+                            <td>{{ sample_barcode.cat.birthday|date:"Y-m-d" }}</td>
+                            <td>{{ sample_barcode.cat.age }}</td>
+                            <td>{{ sample_barcode.cat.gender }}</td>
+                            <td>{{ sample_barcode.cat_id }}</td>
+                            <td>{{ sample_barcode.cat.record_number }}</td>
+                            <td>{{ sample_barcode.cat.comment }}</td>
+                        </tr>
+                        {% endfor %} {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

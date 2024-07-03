@@ -1,0 +1,54 @@
+{% extends 'WO/main.html' %} {% load static %} {% block content %}
+
+<script src="{% static 'js/exportCSV.js' %}"></script>
+
+<div class="container py-5 px-5">
+    <form method="GET" class="container px-5">
+        {% csrf_token %} {% for message in messages %}
+        <p id="messages"><span class="red-label">※{{message}}</span></p>
+        {% endfor %}
+        <div class="row">
+            <div class="col-md-5">
+                <label for="date1" class="col-form-label">起始日期：</label>
+                <input type="date" id="date1" name="date1" class="form-control" required /><br />
+            </div>
+            <div class="col-md-5">
+                <label for="date2" class="col-form-label">结束日期：</label>
+                <input type="date" id="date2" name="date2" class="form-control" required /><br />
+            </div>
+            <div class="col-md-2">
+                <label for="" class="col-form-label" style="min-height: 31px"></label>
+                <div class="input-group">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-outline-dark">查询</button>
+                        <button type="button" class="btn btn-outline-primary" onclick="exportTableToCSV('region_sample_barcode')">汇出</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if sample_barcodes %}
+        <table class="table table-bordered" id="result">
+            <thead>
+                <tr>
+                    <th>检体编码管</th>
+                    <th>医华病历编码</th>
+                    <th>病人姓名</th>
+                    <th>检体病理说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sample_barcode in sample_barcodes %}
+                <tr>
+                    <td>{{ sample_barcode.sample_barcode_detail }}{{ sample_barcode.quota }}</td>
+                    <td>{{ sample_barcode.cat_id }}</td>
+                    <td>{{ sample_barcode.cat.patient_name }}</td>
+                    <td>{{ sample_barcode.histological_comment }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </form>
+</div>
+
+{% endblock content %}

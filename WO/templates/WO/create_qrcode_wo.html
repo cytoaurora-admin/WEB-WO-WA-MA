@@ -1,0 +1,142 @@
+{% extends 'WO/main.html' %} {% load static %} {% block content %}
+
+<script src="{% static 'js/snNumber.js' %}"></script>
+<script src="{% static 'js/detectionCode.js' %}"></script>
+
+<div class="container py-5 px-5">
+	<form method="POST" class="container px-5">
+		{% csrf_token %} {% for message in messages %}
+		<p id="messages"><span class="red-label">※{{message}}</span></p>
+		{% endfor %}
+		<h4 class="font-weight-bold">指定工单：</h4>
+		<br />
+		<div class="row">
+			<div class="col-md-6">
+				<label for="location"><span class="red-label">*</span>检验点：</label>
+				<select id="location" name="location" class="form-control" required>
+					<option value="">请选择</option>
+					{% for location in locations|dictsort:"option_value" %}
+					<option value="{{ location.option_value }}">{{ location.option_value }}: {{ location.option_text }}</option>
+					{% endfor %}</select
+				><br />
+
+				<label for="work_order_type"><span class="red-label">*</span>工单种类：</label>
+				<select id="work_order_type" name="work_order_type" class="form-control" required>
+					<option value="">请选择</option>
+					<option value="T">一般工单</option>
+					<option value="K">校验工单</option>
+					<option value="S">研究工单</option>
+					<option value="P">公关工单</option>
+					<option value="F">急件工单</option>
+					<option value="O">不上机工单</option></select
+				><br />
+			</div>
+			<div class="col-md-6">
+				<label for="date"><span class="red-label">*</span>检验日期：</label>
+				<input type="date" id="date" name="date" class="form-control" required /><br />
+
+				<label for="wo_owner"><span class="red-label">*</span>工单负责人：</label>
+				<input type="text" id="wo_owner" name="wo_owner" class="form-control" value="" maxlength="6" required /><br />
+			</div>
+		</div>
+
+		<h4 class="font-weight-bold">未做检体清单：</h4>
+		<br />
+		<label for="sample_barcode"><span class="red-label">*</span>检体编码：</label>
+		<select id="sample_barcode" name="sample_barcode" class="form-control" required>
+			<option value="">请选择</option>
+			{% for sample_barcode in sample_barcodes|dictsort:"sample_barcode_detail" %}
+			<option value="{{ sample_barcode.sample_barcode_detail }}">{{ sample_barcode.sample_barcode_detail }}({{ sample_barcode.done }}/30){{ sample_barcode.cat_id }}</option>
+			{% endfor %}</select
+		><br />
+
+		<h4 class="font-weight-bold">编码选项：</h4>
+		<br />
+
+		<div class="row">
+			<div class="col-md-6">
+				<label for="detection_code"><span class="red-label">*</span>检验组合码：</label>
+				<input type="text" id="detection_code" name="detection_code" class="bg-light form-control form-control" readonly /><br />
+
+				<div class="row">
+					<div class="col-md-6">
+						<input type="checkbox" class="btn-check" id="procject1" autocomplete="off" value="0102" />
+						<label class="btn btn-outline-light text-dark" for="procject1">医泛安</label><br />
+
+						<input type="checkbox" class="btn-check" id="procject2" autocomplete="off" value="0304" />
+						<label class="btn btn-outline-light text-dark" for="procject2">医乳安</label><br />
+
+						<input type="checkbox" class="btn-check" id="procject3" autocomplete="off" value="0105" />
+						<label class="btn btn-outline-light text-dark" for="procject3">医肺安</label><br />
+
+						<input type="checkbox" class="btn-check" id="procject4" autocomplete="off" value="0106" />
+						<label class="btn btn-outline-light text-dark" for="procject4">医肝安</label><br />
+					</div>
+					<div class="col-md-6">
+						<input type="checkbox" class="btn-check" id="procject5" autocomplete="off" value="0708" />
+						<label class="btn btn-outline-light text-dark" for="procject5">医腸安</label><br />
+
+						<input type="checkbox" class="btn-check" id="procject6" autocomplete="off" value="0309" />
+						<label class="btn btn-outline-light text-dark" for="procject6">医巢安</label><br />
+
+						<input type="checkbox" class="btn-check" id="procject7" autocomplete="off" value="0110" />
+						<label class="btn btn-outline-light text-dark" for="procject7">医攝安</label><br />
+
+						<input type="checkbox" class="btn-check" id="procject8" autocomplete="off" value="0511" />
+						<label class="btn btn-outline-light text-dark" for="procject8">医颈安</label><br />
+					</div>
+				</div>
+				<br />
+				<button
+					class="btn btn-outline-light btn-block d-flex align-items-center justify-content-center"
+					style="height: 15px; padding: 0"
+					type="button"
+					data-toggle="collapse"
+					data-target="#antibodyOptions"
+					aria-expanded="false"
+					aria-controls="antibodyOptions"
+				>
+					<i class="fas fa-chevron-down" style="font-size: 10px; color: black"></i>
+				</button>
+				<div class="collapse" id="antibodyOptions">
+					<br />
+					<div class="row">
+						<div class="col-md-6">
+							<input type="checkbox" class="btn-check" id="procject9" autocomplete="off" value="12" />
+							<label class="btn btn-outline-light text-dark" for="procject9">客制1</label><br />
+
+							<input type="checkbox" class="btn-check" id="procject10" autocomplete="off" value="13" />
+							<label class="btn btn-outline-light text-dark" for="procject10">客制2</label><br />
+						</div>
+						<div class="col-md-6">
+							<input type="checkbox" class="btn-check" id="procject11" autocomplete="off" value="14" />
+							<label class="btn btn-outline-light text-dark" for="procject11">客制3</label><br />
+
+							<input type="checkbox" class="btn-check" id="procject12" autocomplete="off" value="15" />
+							<label class="btn btn-outline-light text-dark" for="procject12">客制4</label><br />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<label for="serial_number"><span class="red-label">*</span>实验流水序号：</label>
+				<select id="serial_number" name="serial_number" class="form-control" required>
+					<option value="">请选择</option>
+				</select>
+
+				<div id="machine_container"></div>
+				<br />
+
+				<label for="wo_comment" class="d-flex align-items-start">工单说明：</label>
+				<textarea id="wo_comment" name="wo_comment" class="form-control"></textarea><br />
+
+				<div class="text-right">
+					<input type="submit" value="产生QR码及工单号码" class="btn btn-outline-primary" />
+					<input type="button" onclick="window.location.href='/create_qrcode_wo/'" value="重置" class="btn btn-outline-dark" /><br /><br />
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,120 @@
+{% extends 'WO/main.html' %} {% load static %} {% block content %}
+
+<script src="{% static 'js/nubTube.js' %}"></script>
+
+<div class="container py-5 px-5">
+    <form method="GET" class="container px-5">
+        {% csrf_token %} {% for message in messages %}
+        <p id="messages"><span class="red-label">※{{message}}</span></p>
+        {% endfor %}
+        <div class="input-group">
+            <label for="fuzzy_query" class="col-form-label"><span class="red-label">*</span>选择病人：</label>
+            <input type="search" id="fuzzy_query" name="fuzzy_query" value="{{ request.GET.fuzzy_query }}" class="form-control" required />
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-outline-dark">查询</button>
+            </div>
+        </div>
+        {% if request.GET.fuzzy_query %} {% if filtered_patients %}
+        <br />
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>医华病历编码</th>
+                    <th>病人姓名</th>
+                    <th>病人生日</th>
+                    <th>性别</th>
+                    <th>医院</th>
+                    <th>医院病历号码</th>
+                    <th>初诊日期</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for patient in filtered_patients %}
+                <tr>
+                    <td>{{ patient.cat_id }}</td>
+                    <td>{{ patient.patient_name }}</td>
+                    <td>{{ patient.birthday|date:"Y-m-d" }}</td>
+                    <td>{{ patient.gender }}</td>
+                    <td>{{ patient.hospital }}</td>
+                    <td>{{ patient.record_number }}</td>
+                    <td>{{ patient.initial_diagnosis|date:"Y-m-d" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <!-- <br />
+        <p><span class="red-label">※找不到该病人资料，请添加病人纪录。</span></p> -->
+        {% endif %} {% endif %}
+    </form>
+    <hr />
+    <form method="POST" class="container px-5">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <label for="extract"><span class="red-label">*</span>检体抽取日期：</label>
+                <input type="datetime-local" id="extract" name="extract" class="form-control" required /><br />
+
+                <label for="source"><span class="red-label">*</span>检体取得单位：</label>
+                <select id="source" name="source" class="form-control" required>
+                    <option value="">请选择</option>
+                    {% for source in sources|dictsort:"option_value" %}
+                    <option value="{{ source.option_value }}">{{ source.option_value }}: {{ source.option_text }}</option>
+                    {% endfor %}</select
+                ><br />
+
+                <label for="nub_tube"><span class="red-label">*</span>检体数量：</label>
+                <select id="nub_tube" name="nub_tube" class="form-control" required>
+                    <option value="">请选择</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+
+                <div id="tube_container"></div>
+                <br />
+
+                <label for="existing_sample_code">既有检体编码：</label>
+                <input type="text" id="existing_sample_barcode" name="existing_sample_barcode" class="form-control" /><br />
+
+                <label for="sample_quality">检体外观品质：</label>
+                <select id="sample_quality" name="sample_quality" class="form-control">
+                    <option value="0">Fresh and red color</option>
+                    <option value="1">Fresh and dark red color</option>
+                    <option value="2">Different layers present</option>
+                    <option value="3">Some clotting appear</option>
+                    <option value="4">Clotting</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="project"><span class="red-label">*</span>项目：</label>
+                <select id="project" name="project" class="form-control" required>
+                    <option value="">请选择</option>
+                    {% for project in projects|dictsort:"option_value" %}
+                    <option value="{{ project.option_value }}">{{ project.option_value }}: {{ project.option_text }}</option>
+                    {% endfor %}</select
+                ><br />
+
+                <label for="cat_id_temp"><span class="red-label">*</span>医华病历编码：</label>
+                {% for patient in filtered_patients %}
+                <input type="text" id="cat_id_temp" name="cat_id_temp" value="{{ patient.cat_id }}" class="bg-light form-control" readonly /><br />
+                {% empty %}
+                <input type="text" id="cat_id_temp" name="cat_id_temp" class="bg-light form-control" required /><br />
+                {% endfor %}
+
+                <label for="physical_comment" class="d-flex align-items-start">检体外观说明：</label>
+                <textarea id="physical_comment" name="physical_comment" class="form-control"></textarea><br />
+
+                <label for="histological_comment" class="d-flex align-items-start">检体病理说明：</label>
+                <textarea id="histological_comment" name="histological_comment" class="form-control"></textarea><br />
+
+                <div class="text-right">
+                    <input type="submit" value="产生检体编码" class="btn btn-outline-primary" />
+                    <input type="button" onclick="window.location.href='/create_sample_barcode/'" value="重置" class="btn btn-outline-dark" /><br /><br />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

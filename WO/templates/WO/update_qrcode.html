@@ -1,0 +1,102 @@
+{% extends 'WO/main.html' %} {% load static %} {% block content %}
+
+<div class="container py-5 px-5">
+    <form method="GET" class="container px-5">
+       
+        <div class="input-group">
+            <label for="qrcode" class="col-form-label"><span class="red-label">*</span>选择QR码：</label>
+            <input type="search" id="qrcode" name="qrcode" value="{{ request.GET.qrcode }}" class="form-control" required/>
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-outline-dark">查询</button>
+            </div>
+        </div>
+        {% csrf_token %} {% for message in messages %}
+        <p id="messages"><span class="red-label">※{{message}}</span></p>
+        {% endfor %}
+    </form>
+    <hr />
+    <form method="POST" class="container px-5" action="{% url 'save_qrcode' %}"> 
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-4">
+                <input type="hidden" id="qrcode" name="qrcode" value="{{ request.GET.qrcode }}" class="form-control" required/>
+
+                <label for="cat_id_temp">医华病历编码：</label>
+                <input type="text" id="cat_id_temp" name="cat_id_temp" class="bg-light form-control" value="{{ cat_id }}" readonly /><br />
+
+                <label for="record_number">医院病历号码：</label>
+                <input type="text" id="record_number" name="record_number" class="form-control" value="{{ record_number }}" /><br />
+
+                <label for="extract">检体抽取日期：</label>
+                <input type="text" id="extract" name="extract" class="bg-light form-control" value="{{ extract|date:"Y-m-d H:i" }}" readonly /><br />
+
+                <label for="source">检体取得单位：</label>
+                <input type="text" id="source" name="source" class="bg-light form-control" value="{{ source }}" readonly /><br />
+
+                <label for="project">项目：</label>
+                <input type="project" id="project" name="project" class="bg-light form-control" value="{{ project }}" readonly /><br />
+            </div>
+
+            <div class="col-md-4">
+                <label for="location">检验点：</label>
+                <input type="text" id="location" name="location" class="bg-light form-control"  value="{{ location }}" readonly/><br />
+                
+                <label for="date">检验日期：</label>
+                <input type="text" id="date" name="date" class="bg-light form-control"  value="{{ date|date:"Y-m-d" }}" readonly/><br />
+                
+                <label for="machine">检验机台别：</label>
+                <select id="machine" name="machine" class="form-control">
+                    <option value="">请选择</option>
+                    {% for option in machines|dictsort:"checkbox_value" %}
+                    <option value="{{ option.checkbox_value }}" {% if option.checkbox_value == machine %}selected{% endif %}>{{ option.checkbox_text }}</option>
+                    {% endfor %}
+                </select><br />
+
+                <label for="comment" class="d-flex align-items-start">检验说明：</label>
+                <textarea id="comment" name="comment" class="form-control">{{ comment }}</textarea><br />
+            </div>
+            <div class="col-md-4">
+                <label for="antibody_type">抗体项目：</label>
+                <select id="antibody_type" name="antibody_type" class="form-control">
+                    <option value="">请选择</option>
+                    {% for option in antibody_types|dictsort:"option_value" %}
+                    <option value="{{ option.option_value }}" {% if option.option_value == antibody_type %}selected{% endif %}>{{ option.option_text }}</option>                    
+                    {% endfor %}
+                </select><br />
+
+                <label for="cover_type">上盖类型：</label>
+                <select id="cover_type" name="cover_type" class="form-control">
+                    {% for option in cover_types|dictsort:"option_value" %}
+                    <option value="{{ option.option_value }}" {% if option.option_value == cover_type %}selected{% endif %}>{{ option.option_text }}</option>
+                    {% endfor %}
+                </select><br />
+
+                <label for="chip_type">晶片类型：</label>
+                <select id="chip_type" name="chip_type" class="form-control">
+                    {% for option in chip_types|dictsort:"option_value" %}
+                    <option value="{{ option.option_value }}" {% if option.option_value == chip_type %}selected{% endif %}>{{ option.option_text }}</option>
+                    {% endfor %}
+                </select><br />
+
+                <label for="operating_type">实验操作类型：</label>
+                <select id="operating_type" name="operating_type" class="form-control">
+                    {% for option in operating_types|dictsort:"option_value" %}
+                    <option value="{{ option.option_value }}" {% if option.option_value == operating_type %}selected{% endif %}>{{ option.option_text }}</option>
+                    {% endfor %}
+                </select><br />
+
+                <label for="preprocess_type">前处理类型：</label>
+                <select id="preprocess_type" name="preprocess_type" class="form-control">
+                    {% for option in preprocess_types|dictsort:"option_value" %}
+                    <option value="{{ option.option_value }}" {% if option.option_value == preprocess_type %}selected{% endif %}>{{ option.option_text }}</option>
+                    {% endfor %}
+                </select><br />
+                <div class="text-right">
+                    <button type="submit" class="btn btn-outline-primary" >更新</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

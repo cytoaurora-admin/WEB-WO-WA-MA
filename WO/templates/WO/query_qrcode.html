@@ -1,0 +1,44 @@
+{% extends 'WO/main.html' %} {% load static %} {% block content %}
+
+<script src="{% static 'js/exportCSV.js' %}"></script>
+
+<div class="container py-5 px-5">
+    <form method="GET" class="container px-5">
+        {% csrf_token %} {% for message in messages %}
+        <p id="messages"><span class="red-label">※{{message}}</span></p>
+        {% endfor %}
+        <div class="input-group">
+            <label for="fuzzy_query" class="col-form-label">选择病人：</label>
+            <input type="search" id="fuzzy_query" name="fuzzy_query" value="{{ request.GET.fuzzy_query }}" class="form-control" required />
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-outline-dark">查询</button>
+                <button type="button" class="btn btn-outline-primary" onclick="exportTableToCSV('patient_qrcode_info')">汇出</button>
+            </div>
+        </div>
+        <br />
+        {% if request.GET.fuzzy_query %} {% if filtered_patients %}
+        <table class="table table-bordered" id="result">
+            <thead>
+                <tr>
+                    <th>QRcode</th>
+                    <th>病人姓名</th>
+                    <th>检体病理说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for patient in filtered_patients %} {% for qrcode, histological_comment in patient.qrcodes_comments %}
+                <tr>
+                    <td>{{ qrcode.qrcode }}</td>
+                    <td>{{ patient.patient_name }}</td>
+                    <td>{{ histological_comment }}</td>
+                </tr>
+                {% endfor %} {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p><span class="red-label">※找不到该病人资料。</span></p>
+        {% endif %} {% endif %}
+    </form>
+</div>
+
+{% endblock content %}

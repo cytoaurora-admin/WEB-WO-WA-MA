@@ -1,0 +1,48 @@
+{% extends 'WO/main.html' %} {% block content %}
+
+<div class="container py-5 px-5">
+    <form method="POST" class="container px-5">
+        {% csrf_token %} {% for message in messages %}
+        <p id="messages"><span class="red-label">※{{message}}</span></p>
+        {% endfor %}
+        <label for="cat_id">医华病历编码：</label>
+        <input type="text" id="cat_id" name="cat_id" value="{{ next_cat_id }}" class="bg-light form-control" readonly /><br />
+
+        <label for="patient_name"><span class="red-label">*</span>病人姓名：</label>
+        <input type="text" id="patient_name" name="patient_name" class="form-control" required /><br />
+
+        <label for="birthday"><span class="red-label">*</span>病人生日：</label>
+        <input type="date" id="birthday" name="birthday" class="form-control" required /><br />
+
+        <label for="gender"><span class="red-label">*</span>性别：</label>
+        <select id="gender" name="gender" class="form-control">
+            <option value="0">未知</option>
+            <option value="1">男</option>
+            <option value="2">女</option></select
+        ><br />
+
+        <label for="hospital"><span class="red-label">*</span>医院：</label>
+        <select id="source" name="source" class="form-control" required>
+            <option value="">请选择</option>
+            {% for source in sources|dictsort:"option_value" %}
+            <option value="{{ source.option_value }}">{{ source.option_value }}: {{ source.option_text }}</option>
+            {% endfor %}</select
+        ><br />
+
+        <label for="record_number">医院病历号码：</label>
+        <input type="text" id="record_number" name="record_number" class="form-control" /><br />
+
+        <label for="initial_diagnosis"><span class="red-label">*</span>初诊日期：</label>
+        <input type="date" id="initial_diagnosis" name="initial_diagnosis" class="form-control" required /><br />
+
+        <label for="comment" class="d-flex align-items-start">备注：</label>
+        <textarea id="comment" name="comment" class="form-control"></textarea><br />
+
+        <div class="text-right">
+            <input type="submit" value="添加病人" class="btn btn-outline-primary" />
+            <input type="button" onclick="window.location.href='/add_patient/'" value="重置" class="btn btn-outline-dark" /><br /><br />
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,27 @@
+{% extends 'WO/main.html' %} {% load static %} {% block content %}
+
+<div class="container py-5 px-5">
+    <form method="POST" class="container px-5">
+        <div class="row">
+            <div class="col-md-5">
+                <label for="qrcode" class="col-form-label">输入工单号码：</label>
+                <input type="text" name="work_order" class="form-control" required />
+            </div>
+            <div class="col-md-5">
+                <label for="qrcode" class="col-form-label">选择完成时间：</label>
+                <input type="datetime-local" name="finish_date" class="form-control" required />
+            </div>
+            <div class="col-md-2">
+                <label for="" class="col-form-label" style="min-height: 60px"></label>
+                <button type="submit" class="btn btn-outline-dark">确认</button>
+            </div>
+        </div>
+        <br />
+
+        {% csrf_token %} {% for message in messages %}
+        <p id="messages"><span class="red-label">※{{message}}</span></p>
+        {% endfor %}
+    </form>
+</div>
+
+{% endblock content %}

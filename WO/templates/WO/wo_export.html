@@ -1,0 +1,132 @@
+{% extends 'WO/main.html' %} {% load static %} {% block content %}
+
+<script src="{% static 'js/exportCSV.js' %}"></script>
+<script src="{% static 'js/woMapping.js' %}"></script>
+
+<div class="container py-5 px-5">
+    <form method="GET" class="container px-5">
+        {% csrf_token %}
+        <h4 class="font-weight-bold">未知工单查询：</h4>
+        <br />
+        <div class="row">
+            <div class="col-md-6">
+                <label for="location"><span class="red-label">*</span>检验点：</label>
+                <select id="location" name="location" class="form-control">
+                    <option value="">请选择</option>
+                    {% for location in locations|dictsort:"option_value" %}
+                    <option value="{{ location.option_value }}">{{ location.option_value }}: {{ location.option_text }}</option>
+                    {% endfor %}
+                </select>
+                <br />
+            </div>
+            <div class="col-md-6">
+                <label for="date"><span class="red-label">*</span>检验日期：</label>
+                <div class="input-group">
+                    <input type="date" id="date" name="date" class="form-control" />
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-outline-dark">查询</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <form method="POST" class="container px-5">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-12">
+                <label for="wo_result"><span class="red-label">*</span>工单列表：</label>
+                <div class="input-group">
+                    <select id="wo_result" name="wo_result" class="form-control" required>
+                        <option value="">请选择</option>
+                        {% for work_order in filtered_wo_list %}
+                        <option value="{{ work_order.work_order }}">{{ work_order.work_order }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-outline-primary">接收</button>
+                    </div>
+                </div>
+                {% csrf_token %} {% for message in messages %}
+                <p id="messages"><span class="red-label">※{{message}}</span></p>
+                {% endfor %}
+            </div>
+        </div>
+    </form><br />
+    <form method="GET" class="container px-5">
+        {% csrf_token %}
+        <h4 class="font-weight-bold">已知工单查询：</h4>
+        <br />
+        <div class="row">
+            <div class="col-md-12">
+                <label for="wo_export"><span class="red-label">*</span>请输入工单号码(8码)：</label>
+                <div class="input-group">
+                    {% if wo_result %}
+                    <input type="text" id="wo_export" name="wo_export" class="form-control" maxlength="8" value="{{ wo_result }}" />
+                    {% else %}
+                    <input type="text" id="wo_export" name="wo_export" class="form-control" maxlength="8" />
+                    {% endif %}
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-outline-dark">预览</button>
+                        <button type="button" class="btn btn-outline-primary" onclick="exportTableToCSV('wo_{{ work_order.work_order }}_qrcode')">汇出</button>
+                    </div>
+                </div>
+                <br />
+                {% if work_order.work_order %}
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-sm table-borderless" id="result">
+                            <thead>
+                                <tr>
+                                    <th>Description: <span class="font-weight-normal">{{ description }}</span></th>
+                                </tr>
+                                <tr>
+                                    <th>Date: <span class="font-weight-normal">{{ date|date:"Y-m-d" }}</span></th>
+                                </tr>
+                                <tr>
+                                    <th>Lab: <span class="font-weight-normal">{{ location }}</span></th>
+                                </tr>
+                                <tr>
+                                    <th>Working Order: <span class="font-weight-normal">{{ work_order.work_order }}</span></th>
+                                </tr>
+                                <tr>
+                                    <th>Owner: <span class="font-weight-normal">{{ work_order.owner.userid }}</span></th>
+                                </tr>
+                                <tr>
+                                    <th>Receive: <span class="font-weight-normal">{{ receive_time|date:"Y-m-d H:i:s" }}</span></th>
+                                </tr>
+                                <tr>
+                                    <th>Deadline: <span class="font-weight-normal">{{ deadline|date:"Y-m-d H:i:s" }}</span></th>
+                                </tr>
+                                <tr>
+                                    <th>QRcode </th>
+                                    <th>Sample_barcode_detail</th>
+                                    <th>Machine</th>
+                                    <th>Antibody</th>
+                                    <th>Chip</th>
+                                    <th>Cover</th>
+                                    <th>Comment</th>
+                                </tr>
+                            <tbody>
+                                {% for qr in selected_qrs %}
+                                    <tr>
+                                        <td>{{ qr.qrcode }}</td>
+                                        <td>{{ qr.sample_barcode_detail.sample_barcode_detail }}30</td>
+                                        <td>{{ qr.machine }}</td>
+                                        <td>{{ qr.antibody_type }}</td>
+                                        <td>{{ qr.chip_type }}</td>
+                                        <td>{{ qr.cover_type }}</td>
+                                        <td>{{ qr.comment }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

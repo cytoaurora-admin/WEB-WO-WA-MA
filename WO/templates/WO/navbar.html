@@ -1,0 +1,48 @@
+{% load static %}
+
+<script src="{% static 'js/navbar.js' %}"></script>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <img src="{% static 'images/logo.png' %}" style="width: 60px; min-width: 60px" />
+
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-item nav-link" href="{% url 'add_patient' %}">添加病人记录</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-item nav-link" href="{% url 'create_sample_barcode' %}">产生检体记录</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-item nav-link" href="{% url 'create_qrcode_wo' %}">产生QR码及记录</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-item nav-link" href="{% url 'wo_export' %}">工单接收及汇出</a>
+            </li>
+            {% if request.user.is_staff %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 查询与汇出 </a>
+                <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{% url 'query_qrcode' %}">查询病人QR码</a>
+                    <a class="dropdown-item" href="{% url 'query_sample_barcode' %}">查询日期检体编码</a>
+                    <a class="dropdown-item" href="{% url 'report_export' %}">资料汇出</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 回收与更动 </a>
+                <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{% url 'update_wo_finish_time' %}">更新工单完成时间</a>
+                    <a class="dropdown-item" href="{% url 'update_qrcode' %}">更新样本记录</a>
+                    <a class="dropdown-item" href="{% url 'recycle_qrcode' %}">回收QR码</a>
+                    <!-- <a class="dropdown-item" href="{% url 'update_option' %}">变更选项内容</a> -->
+                </div>
+            </li>
+            {% endif %}
+        </div>
+    </div>
+    <span class="hello-msg">您好, {{ request.user.username }}</span>
+    <span><a class="hello-msg" href="{% url 'logout' %}">登出</a></span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</nav>
