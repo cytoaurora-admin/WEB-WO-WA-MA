@@ -14,7 +14,7 @@
     -   Git 2.45.1
 
 -   Github Repository
-    -   [WEB_WO_WA_MA](https://github.com/cytoaurora-admin/WEB-WO-WA-MA.git)
+    -   [WEB_WO_WA](https://github.com/cytoaurora-admin/WEB-WO-WA.git)
 
 ## Deployment
 
@@ -48,8 +48,8 @@
 -   Install [Git 2.45.1](https://github.com/git-for-windows/git/releases/download/v2.45.1.windows.1/Git-2.45.1-64-bit.exe)
 
     -   Open the Git Bash
-    -   Enter `git config --global user.name "wallacechiu"`
-    -   Enter `git config --global user.email wallace.chiu@cytoaurora.com`
+    -   Enter `git config --global user.name "cytoaurora-admin"`
+    -   Enter `git config --global user.email cytoaurora-admin@cytoaurora.com`
 
 -   Map network drive
 
@@ -73,7 +73,7 @@
     -   Clone the WEB_WO_WA from GitHub
     -   Open the terminal
     -   Enter `cd .../your/path`
-    -   Enter `git clone https://github.com/wallacechiu/WEB_WO_WA.git`
+    -   Enter `git clone https://github.com/cytoaurora-admin/WEB_WO_WA.git`
     -   Enter `cd WEB_WO_WA`
     -   Enter `python .\manage.py makemigrations`
     -   Enter `python .\manage.py migrate`
@@ -184,9 +184,9 @@
     -   Clone the WEB_WO_WA from GitHub
     -   Open the terminal
     -   Enter `cd .../your/path`
-    -   Enter `git clone https://github.com/wallacechiu/WEB_WO_WA.git`
-    -   Enter Username for 'https://github.com': `wallacechiu`
-    -   Enter Password for 'https://wallacechiu@github.com': personal access token (request from github account holder)
+    -   Enter `git clone https://github.com/cytoaurora-admin/WEB-WO-WA.git`
+    -   Enter Username for 'https://github.com': `cytoaurora-admin`
+    -   Enter Password for 'https://cytoaurora-admin@github.com': personal access token (request from github account holder)
     -   Open the setting.py file in the WEB_WO_WA directory with editor
     -   Set `ALLOWED_HOSTS` to your IP address
     -   Open views.py and locate the `wo_ab_gen` function
