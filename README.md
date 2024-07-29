@@ -14,7 +14,7 @@
     -   Git 2.45.1
 
 -   Github Repository
-    -   [WEB_WO_WA](https://github.com/cytoaurora-admin/WEB-WO-WA.git)
+    -   [WEB_WO_WA](https://github.com/cytoaurora-admin/WEB-WO-WA-MA.git)
 
 ## Deployment
 
@@ -184,7 +184,7 @@
     -   Clone the WEB_WO_WA from GitHub
     -   Open the terminal
     -   Enter `cd .../your/path`
-    -   Enter `git clone https://github.com/cytoaurora-admin/WEB-WO-WA.git`
+    -   Enter `git clone https://github.com/cytoaurora-admin/WEB-WO-WA-MA.git`
     -   Enter Username for 'https://github.com': `cytoaurora-admin`
     -   Enter Password for 'https://cytoaurora-admin@github.com': personal access token (request from github account holder)
     -   Open the setting.py file in the WEB_WO_WA directory with editor
