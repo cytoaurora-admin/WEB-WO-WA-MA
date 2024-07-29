@@ -1,7 +1,7 @@
 # Work Order System
 
 `Editor： Wallace Chiu`  
-`Last update： 2024/ 7/ 3 16:30`
+`Last update： 2024/ 7/ 29 17:00`
 
 ## Information
 
@@ -73,7 +73,7 @@
     -   Clone the WEB_WO_WA from GitHub
     -   Open the terminal
     -   Enter `cd .../your/path`
-    -   Enter `git clone https://github.com/cytoaurora-admin/WEB_WO_WA.git`
+    -   Enter `git clone https://github.com/cytoaurora-admin/WEB_WO_WA_MA.git`
     -   Enter `cd WEB_WO_WA`
     -   Enter `python .\manage.py makemigrations`
     -   Enter `python .\manage.py migrate`
