@@ -14,7 +14,7 @@
     -   Git 2.45.1
 
 -   Github Repository
-    -   [WEB_WO_WA](https://github.com/cytoaurora-admin/WEB-WO-WA-MA.git)
+    -   [WEB-WO-WA-MA](https://github.com/cytoaurora-admin/WEB-WO-WA-MA)
 
 ## Deployment
 
